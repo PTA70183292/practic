@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+transformers>=4.36
+torch
+bitsandbytes
+accelerate
+streamlit
+httpx
+pydantic
+python-multipart
+
