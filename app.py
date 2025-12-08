@@ -1,6 +1,7 @@
 import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import numpy as np
 
 st.set_page_config(page_title="Анализ тональности")
 
@@ -12,7 +13,18 @@ def load_model():
     model.eval()
     return tokenizer, model
 
-st.title("Анализ тональности")
+def predict_sentiment(text, tokenizer, model):
+    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True, max_length=128)
+    with torch.no_grad():
+        outputs = model(**inputs)
+        probs = torch.softmax(outputs.logits, dim=1)
+        pred = torch.argmax(probs, dim=1).item()
+    
+    labels = {0: "Позитивный", 1: "Нейтральный", 2: "Негативный"}
+    return labels[pred], probs[0].numpy()
+
+st.title("📊 Анализ тональности русских текстов")
+st.write("Классификация отзывов на позитивные, нейтральные и негативные")
 
 try:
     tokenizer, model = load_model()
@@ -21,10 +33,12 @@ except:
     st.error("Модель не найдена. Убедитесь, что модель обучена.")
     st.stop()
 
-text_input = st.text_area("Введите текст:", height=150)
+text_input = st.text_area("Введите текст для анализа:", height=150)
 
 if st.button("Анализировать"):
     if text_input:
-        st.info("Анализ...")
+        with st.spinner("Анализ..."):
+            sentiment, probs = predict_sentiment(text_input, tokenizer, model)
+            st.subheader(f"Результат: {sentiment}")
     else:
         st.warning("Пожалуйста, введите текст")
