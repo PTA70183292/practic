@@ -9,3 +9,8 @@ torch==2.1.1
 bitsandbytes==0.41.3
 accelerate==0.25.0
 python-dotenv==1.0.0
+pandas
+streamlit
+python-multipart
+peft
+datasets
