@@ -9,7 +9,7 @@ from config import settings
 from database import get_db, init_db
 from schemas import PredictRequest, PredictResponse, TrainingRequest, TrainingStatusResponse
 from ml_model import get_sentiment_model, SentimentModel
-from training import SentimentTrainer
+#from training import SentimentTrainer
 import crud
 
 app = FastAPI(
@@ -17,7 +17,7 @@ app = FastAPI(
     version=settings.app_version
 )
 
-
+"""
 training_status = {
     "is_training": False,
     "progress": 0,
@@ -25,7 +25,7 @@ training_status = {
     "message": "",
     "history": []
 }
-
+"""
 trainer_instance = None
 
 @app.on_event("startup")
@@ -89,6 +89,7 @@ def get_all_predictions(
     predictions = crud.get_all_predictions(db=db, skip=skip, limit=limit)
     return predictions
 
+"""
 @app.post("/training/upload-dataset")
 async def upload_dataset(file: UploadFile = File(...)):
     if not file.filename.endswith('.csv'):
@@ -122,7 +123,8 @@ async def upload_dataset(file: UploadFile = File(...)):
         if os.path.exists(file_path):
             os.remove(file_path)
         raise HTTPException(status_code=400, detail=f"Ошибка чтения файла: {str(e)}")
-
+"""
+"""
 def run_training_task(
     dataset_path: str,
     num_epochs: int,
@@ -177,7 +179,9 @@ def run_training_task(
         training_status["message"] = f"Ошибка обучения: {str(e)}"
     finally:
         training_status["is_training"] = False
+"""
 
+"""
 @app.post("/training/start")
 async def start_training(
     background_tasks: BackgroundTasks,
@@ -211,7 +215,10 @@ async def start_training(
             "learning_rate": learning_rate
         }
     }
+"""
 
+
+"""
 @app.get("/training/status", response_model=TrainingStatusResponse)
 def get_training_status():
 
@@ -221,7 +228,9 @@ def get_training_status():
 def get_training_history():
 
     return {"history": training_status["history"]}
+"""
 
+"""
 @app.post("/training/load-model")
 def load_trained_model(model_path: str):
 
@@ -239,7 +248,7 @@ def load_trained_model(model_path: str):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка загрузки модели: {str(e)}")
-
+"""
 @app.get("/health")
 def health_check():
 
