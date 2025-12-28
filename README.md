@@ -1,4 +1,5 @@
 Требуется Python версии 3.11 для совместимости с стабильными версиями библиотек
+Linux
 GPU с поддержкой CUDA
 Сделать установку: python -m pip install -r requirements.txt
 Запустить main.py
