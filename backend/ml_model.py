@@ -51,7 +51,7 @@ class SentimentModel:
         """
         # 1. Определяем целевое имя адаптера
         # Если пришло None, "Default" или пустая строка -> используем "default"
-        target_adapter = "default"
+        switch_modeltarget_adapter = "default"
         if model_name and model_name not in ["Default", "Base", "default"]:
             target_adapter = model_name
 
@@ -59,16 +59,16 @@ class SentimentModel:
         if self.active_adapter_name == target_adapter:
             return
 
-        print(f"🔄 Switching adapter to: '{target_adapter}'...")
+        print(f"переключение адаптера на'{target_adapter}'...")
 
         # 3. Если хотим вернуться к дефолтному
         if target_adapter == "default":
             try:
                 self.model.set_adapter("default")
                 self.active_adapter_name = "default"
-                print("✅ Switched to Default adapter.")
+                print("переключено на дефолтный адаптер.")
             except Exception as e:
-                print(f"❌ Failed to switch to default: {e}")
+                print(f"не удалось переключить на дефолтный адаптер: {e}")
             return
 
         # 4. Если это кастомная модель
@@ -76,12 +76,12 @@ class SentimentModel:
         if target_adapter in self.model.peft_config:
             self.model.set_adapter(target_adapter)
             self.active_adapter_name = target_adapter
-            print(f"✅ Switched to cached adapter: {target_adapter}")
+            print(f"переключено на кешированный адаптер: {target_adapter}")
         else:
             # Если в памяти нет, пробуем загрузить с диска
             adapter_path = f"./trained_models/{target_adapter}"
             if not os.path.exists(adapter_path):
-                print(f"⚠️ Путь адаптера не найден: {adapter_path}. Остается на текущем.")
+                print(f" Путь адаптера не найден: {adapter_path}. Остается на текущем.")
                 return
 
             try:
